@@ -17,7 +17,7 @@ app = express()
 connectDB()
 
 // parse request body
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: false }))
 
 // json
 app.use(express.json())
