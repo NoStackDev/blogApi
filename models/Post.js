@@ -14,13 +14,14 @@ const PostSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    username: {
-        type: String,
-        required: false
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
     categories: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Categories",
+        ref: "Category",
         required: false
     }],
 }, { timestamps: true })

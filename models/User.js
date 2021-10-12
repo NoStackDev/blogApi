@@ -13,13 +13,18 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
     profilePic: {
         type: String,
         default: ""
     },
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+        required: false
+    }],
 }, { timestamps: true })
 
 

@@ -1,4 +1,5 @@
 const User = require("../models/User")
+const Post = require("../models/Post")
 const bcrypt = require("bcrypt")
 
 
@@ -36,14 +37,43 @@ const updateUser = async (req, res) => {
         if (req.body.password) {
             req.body.password = await bcrypt.hash(req.body.password, 10)
         }
-        const updatedUser = User.findByIdAndUpdate(req.params.id, req.body)
-        res.status(200).json({ "message": "success" })
-    } catch (err) { console.log(err) }
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body )
+        if (updatedUser) {
+            res.status(200).json({ "message": "update successful" })
+        } else { res.status(401).json({ "message": "update Unsuccessful" }) }
+    } catch (err) { 
+        res.status(500).json(err)
+    }
+}
+
+// delete user
+const deleteUser = async (req, res) => {
+    try {
+        const deletedUser = await User.findByIdAndDelete(req.params.id)
+        if (deletedUser) {
+            res.status(200).json({ "message": "user deleted" })
+        } else { res.status(401).json({ "message": "delete unsuccessful" }) }
+    } catch (err) { 
+        res.status(500).json(err)
+    }
+}
+
+// get user
+const getUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+        if (user) {
+            const { password, ...others } = user._doc
+            res.status(200).json(others)
+        } else { res.status(404).json({ "message": "user does not exist" }) }
+    } catch (err) { res.status(500).json(err) }
 }
 
 module.exports = { 
     signup: signup,
     login: login,
-    updateUser: updateUser
+    updateUser: updateUser,
+    deleteUser: deleteUser,
+    getUser: getUser
 }
 
