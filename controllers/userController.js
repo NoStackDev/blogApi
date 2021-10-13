@@ -69,11 +69,27 @@ const getUser = async (req, res) => {
     } catch (err) { res.status(500).json(err) }
 }
 
+// get all users
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find({})
+        if (users) {
+            newUsers = users.map(user => {
+                const { password, ...others } = user._doc
+                return others
+            })
+
+            res.status(200).json(newUsers)
+        } else { res.status(200).json({ "message": "there are no users" }) }
+    } catch(err) { res.status(500).json(err) }
+}
+
 module.exports = { 
     signup: signup,
     login: login,
     updateUser: updateUser,
     deleteUser: deleteUser,
-    getUser: getUser
+    getUser: getUser,
+    getAllUsers: getAllUsers
 }
 
