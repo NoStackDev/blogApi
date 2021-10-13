@@ -7,6 +7,7 @@ const { connectDB } = require('./db/db')
 const authRouter = require('./routes/auth')
 const userRouter = require('./routes/users')
 const postRouter = require('./routes/posts')
+const categoryRouter = require('./routes/categories')
 
 dotenv.config()
 
@@ -31,6 +32,7 @@ app.use(morgan('dev'))
 app.use('/api', authRouter)
 app.use('/api', userRouter)
 app.use('/api', postRouter)
+app.use('/api', categoryRouter)
 
 app.listen(PORT, () => {
     console.log(`server is running on port ${ PORT }`)

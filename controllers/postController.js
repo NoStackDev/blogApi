@@ -6,7 +6,11 @@ const User = require("../models/User")
 const createPost = async (req, res) => {
     try {
         const user = await User.findById(req.body.userId)
-        const newPost = new Post(req.body)
+        const { categories, ...others } = req.body
+        const newPost = new Post(others)
+        if (categories.length != 0) {
+            categories.forEach( category => newPost.categories.push(category) )
+        }
         newPost.author = user._id
         const savedPost = await newPost.save()
         user.posts.push(savedPost._id)
@@ -31,7 +35,7 @@ const getPost = async (req, res) => {
 const getAllPosts = async (req, res) => {
     try {
         const posts = await Post.find({})
-        if (posts) {
+        if (posts.length !== 0) {
             res.status(200).json(posts)
         } else { res.status(404).json({ "message": "there are no posts" }) }
     } catch(err) { res.status(500).json(err) }

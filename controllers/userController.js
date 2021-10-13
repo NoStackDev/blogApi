@@ -50,6 +50,7 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const deletedUser = await User.findByIdAndDelete(req.params.id)
+        await Post.deleteMany({ author: deletedUser._id })
         if (deletedUser) {
             res.status(200).json({ "message": "user deleted" })
         } else { res.status(401).json({ "message": "delete unsuccessful" }) }
@@ -73,7 +74,7 @@ const getUser = async (req, res) => {
 const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({})
-        if (users) {
+        if (users.length !== 0) {
             newUsers = users.map(user => {
                 const { password, ...others } = user._doc
                 return others
